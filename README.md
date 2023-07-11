@@ -7,6 +7,7 @@ https://platform.openai.com/docs/api-reference
 ---
 
 If you want to try them out, add your API Key to the shared.js file.
+<br>
 All are intended to run from terminal separatly such as:
 - node chat
 - node code
