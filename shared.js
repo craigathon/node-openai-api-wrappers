@@ -1,4 +1,4 @@
-var _apiKey = '<YOUR_API_KEY_HERE>';
+var _apiKey = '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';
 
 exports.getApiKey = function() {
   return _apiKey;
