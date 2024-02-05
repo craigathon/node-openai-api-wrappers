@@ -1,6 +1,7 @@
 const { Configuration, OpenAIApi } = require("openai");
 const readline = require('readline');
 var shared = require('./shared.js');
+var model = 'gpt-4-1106-preview';
 
 const configuration = new Configuration({
   apiKey: shared.getApiKey(),
@@ -8,7 +9,7 @@ const configuration = new Configuration({
 
 let close = false;
 let messages = [];
-messages.push({"role": "system", "content": "You are a helpful assistant."});
+console.log(model);
 
 (async() => {
   function askQuestion(query) {
@@ -25,14 +26,31 @@ messages.push({"role": "system", "content": "You are a helpful assistant."});
 
   while(!close) {
     const prompt = await askQuestion("Ready for new message: ");
-    messages.push({"role": "user", "content": prompt});
-    const openai = new OpenAIApi(configuration);
-    const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: messages,
-    });
-    messages.push(completion.data.choices[0].message);
-    console.log(completion.data.choices[0].message.content);
-    console.log('-------------------------------------------');
+    if (prompt == 'clear') {
+      messages = [];
+      console.log(messages);
+    } else if (prompt == 'apex') {
+      messages.push({"role": "system", "content": "You are a helpful Salesforce Expert."});
+      messages.push({"role": "system", "content": "You write Salesforce Apex code following best practices."});
+      console.log(messages);
+    } else {
+      messages.push({"role": "user", "content": prompt});
+      const openai = new OpenAIApi(configuration);
+      const completion = await openai.createChatCompletion({
+        model: model,
+        messages: messages,
+      });
+      messages.push(completion.data.choices[0].message);
+      console.log(completion.data.choices[0].message.content);
+      console.log('+++++++++++++++++++++++++++++++++++++++++++');
+      console.log('+++++++++++++++++++++++++++++++++++++++++++');
+      console.log(messages);
+      console.log('-------------------------------------------');
+      console.log('-------------------------------------------');
+      console.log(completion.data.choices[0].message.content);
+      console.log('+++++++++++++++++++++++++++++++++++++++++++');
+      console.log('+++++++++++++++++++++++++++++++++++++++++++');
+      console.log('+++++++++++++++++++++++++++++++++++++++++++');
+    }
   }
 })()
