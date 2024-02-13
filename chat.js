@@ -1,11 +1,10 @@
-const { Configuration, OpenAIApi } = require("openai");
+const { OpenAI } = require("openai");
 const readline = require('readline');
 var shared = require('./shared.js');
-var model = 'gpt-4-1106-preview';
+var model = 'gpt-4-0125-preview';
 
-const configuration = new Configuration({
-  apiKey: shared.getApiKey(),
-});
+process.env.OPENAI_API_KEY = shared.getApiKey();
+const openai = new OpenAI();
 
 let close = false;
 let messages = [];
@@ -35,19 +34,20 @@ console.log(model);
       console.log(messages);
     } else {
       messages.push({"role": "user", "content": prompt});
-      const openai = new OpenAIApi(configuration);
-      const completion = await openai.createChatCompletion({
+      const completion = await openai.chat.completions.create({
         model: model,
         messages: messages,
       });
-      messages.push(completion.data.choices[0].message);
-      console.log(completion.data.choices[0].message.content);
+      messages.push(completion.choices[0].message);
+      console.log(completion);
+      console.log(completion.choices);
+      console.log(completion.choices[0].message.content);
       console.log('+++++++++++++++++++++++++++++++++++++++++++');
       console.log('+++++++++++++++++++++++++++++++++++++++++++');
       console.log(messages);
       console.log('-------------------------------------------');
       console.log('-------------------------------------------');
-      console.log(completion.data.choices[0].message.content);
+      console.log(completion.choices[0].message.content);
       console.log('+++++++++++++++++++++++++++++++++++++++++++');
       console.log('+++++++++++++++++++++++++++++++++++++++++++');
       console.log('+++++++++++++++++++++++++++++++++++++++++++');

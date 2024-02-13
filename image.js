@@ -1,16 +1,19 @@
-const { Configuration, OpenAIApi } = require("openai");
+const { OpenAI } = require("openai");
+const readline = require('readline');
+var shared = require('./shared.js');
+var model = 'dall-e-3';
+
+process.env.OPENAI_API_KEY = shared.getApiKey();
+const openai = new OpenAI();
+console.log(model);
 
 let prompt = process.argv[2];
 console.log(prompt);
 
-const configuration = new Configuration({
-  apiKey: shared.getApiKey(),
-});
-const openai = new OpenAIApi(configuration);
 (async() => {
-  const response = await openai.createImage({
+  const response = await openai.images.generate({
+    model: model,
     prompt: prompt,
-    n: 1,
     size: "1024x1024",
   });
   console.log(response.data);
